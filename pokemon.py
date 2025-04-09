@@ -1,4 +1,5 @@
 # pokemon.py
+import os
 import pygame
 import math
 import random
@@ -22,7 +23,13 @@ class Pokemon(pygame.sprite.Sprite):
         self.y = y
         self.num_potions = 3
 
-        # сохраниние stats - характеристик покемона
+        # Атрибуты для анимации
+        self.sprites = []  # Список для хранения кадров анимации
+        self.current_sprite = 0  # Текущий кадр
+        self.animation_speed = 0.2  # Скорость анимации
+        self.last_update = pygame.time.get_ticks()  # Время последнего обновления
+
+        # сохранение stats - характеристик покемона
         stats = self.json['stats']
         for stat in stats:
             if stat['stat']['name'] == 'hp':
@@ -42,7 +49,65 @@ class Pokemon(pygame.sprite.Sprite):
             self.types.append(type['type']['name'])
 
         self.size = 150
-        self.set_sprite('front_default')
+        # self.set_sprite('front_default')
+        self.load_sprites()
+
+    def load_sprites(self):
+        """Загружает 4 спрайта анимации из локальной папки"""
+        sprite_folder = f"sprites/{self.name}"
+        
+        # Загружаем 4 спрайта (1.png, 2.png, 3.png, 4.png)
+        for i in range(1, 5):
+            sprite_path = os.path.join(sprite_folder, f"{i}.png")
+            try:
+                if os.path.exists(sprite_path):
+                    sprite = pygame.image.load(sprite_path).convert_alpha()
+                    # Масштабируем спрайт
+                    scale = self.size / sprite.get_width()
+                    new_width = int(sprite.get_width() * scale)
+                    new_height = int(sprite.get_height() * scale)
+                    sprite = pygame.transform.scale(sprite, (new_width, new_height))
+                    self.sprites.append(sprite)
+            except Exception as e:
+                print(f"Error loading sprite {sprite_path}: {e}")
+    
+    def set_sprite(self, side):
+        '''Загружает и масштабирует спрайт покемона'''
+        image = self.json['sprites'][side]
+        image_stream = urlopen(image).read()
+        image_file = io.BytesIO(image_stream)
+        self.image = pygame.image.load(image_file).convert_alpha()
+        scale = self.size / self.image.get_width()
+        new_width = self.image.get_width() * scale
+        new_height = self.image.get_height() * scale
+        self.image = pygame.transform.scale(self.image, (new_width, new_height))
+
+    def set_sprite(self, side):
+        '''Загружает и масштабирует спрайт покемона (используется как fallback)'''
+        image = self.json['sprites'][side]
+        image_stream = urlopen(image).read()
+        image_file = io.BytesIO(image_stream)
+        self.image = pygame.image.load(image_file).convert_alpha()
+        scale = self.size / self.image.get_width()
+        new_width = self.image.get_width() * scale
+        new_height = self.image.get_height() * scale
+        self.image = pygame.transform.scale(self.image, (new_width, new_height))
+
+    def update_animation(self):
+        '''Обновляет текущий кадр анимации'''
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.animation_speed * 1000:  # Преобразуем секунды в миллисекунды
+            self.last_update = now
+            self.current_sprite = (self.current_sprite + 1) % len(self.sprites)
+            self.image = self.sprites[self.current_sprite]
+
+    def draw(self, game, alpha=255):
+        '''Отрисовывает покемона на экране с анимацией'''
+        self.update_animation()  # Обновляем анимацию
+        sprite = self.image.copy()
+        transparency = (255, 255, 255, alpha)
+        sprite.fill(transparency, None, pygame.BLEND_RGBA_MULT)
+        game.blit(sprite, (self.x, self.y))
 
     def perform_attack(self, other, move, game):
         '''Выполняет атаку на другого покемона'''
@@ -71,17 +136,6 @@ class Pokemon(pygame.sprite.Sprite):
                 self.current_hp = self.max_hp
             self.num_potions -= 1
 
-    def set_sprite(self, side):
-        '''Загружает и масштабирует спрайт покемона'''
-        image = self.json['sprites'][side]
-        image_stream = urlopen(image).read()
-        image_file = io.BytesIO(image_stream)
-        self.image = pygame.image.load(image_file).convert_alpha()
-        scale = self.size / self.image.get_width()
-        new_width = self.image.get_width() * scale
-        new_height = self.image.get_height() * scale
-        self.image = pygame.transform.scale(self.image, (new_width, new_height))
-
     def set_moves(self):
         '''Загружает атаки покемона из API'''
         self.moves = []
@@ -101,13 +155,6 @@ class Pokemon(pygame.sprite.Sprite):
                         self.moves.append(move)
         if len(self.moves) > 4:
             self.moves = random.sample(self.moves, 4)
-
-    def draw(self, game, alpha=255):
-        '''Отрисовывает покемона на экране'''
-        sprite = self.image.copy()
-        transparency = (255, 255, 255, alpha)
-        sprite.fill(transparency, None, pygame.BLEND_RGBA_MULT)
-        game.blit(sprite, (self.x, self.y))
 
     def draw_hp(self, game):
         '''Отрисовывает полоску здоровья покемона'''
