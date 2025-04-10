@@ -3,53 +3,38 @@ import os
 import pygame
 import math
 import random
-import requests
-import io
-from urllib.request import urlopen
 from constants import *
 from move import Move
 from ui import display_message
 import time
 
 class Pokemon(pygame.sprite.Sprite):
-    def __init__(self, name, level, x, y):
+    def __init__(self, name, level, x, y, data):
         '''Установка имени, уровня, позиции на экране и количество зелий покемона'''
         pygame.sprite.Sprite.__init__(self)
-        req = requests.get(f'{BASE_URL}/pokemon/{name.lower()}')
-        self.json = req.json()
         self.name = name
         self.level = level
         self.x = x
         self.y = y
         self.num_potions = 3
+        self.data = data[name]
 
         # Атрибуты для анимации
         self.sprites = []  # Список для хранения кадров анимации
         self.current_sprite = 0  # Текущий кадр
         self.animation_speed = 0.2  # Скорость анимации
         self.last_update = pygame.time.get_ticks()  # Время последнего обновления
-
-        # сохранение stats - характеристик покемона
-        stats = self.json['stats']
-        for stat in stats:
-            if stat['stat']['name'] == 'hp':
-                self.current_hp = stat['base_stat'] + self.level
-                self.max_hp = stat['base_stat'] + self.level
-            elif stat['stat']['name'] == 'attack':
-                self.attack = stat['base_stat']
-            elif stat['stat']['name'] == 'defense':
-                self.defense = stat['base_stat']
-            elif stat['stat']['name'] == 'speed':
-                self.speed = stat['base_stat']
+        
+        self.current_hp = self.data['HP'] + self.level
+        self.max_hp = self.data['HP'] + self.level
+        self.attack = self.data['Attack']
+        self.defense = self.data['Defense']
+        self.speed = self.data['Speed']
 
         # сохрание типов покемона
-        self.types = []
-        for i in range(len(self.json['types'])):
-            type = self.json['types'][i]
-            self.types.append(type['type']['name'])
+        self.types = self.data['Types']
 
         self.size = 150
-        # self.set_sprite('front_default')
         self.load_sprites()
 
     def load_sprites(self):
@@ -70,28 +55,6 @@ class Pokemon(pygame.sprite.Sprite):
                     self.sprites.append(sprite)
             except Exception as e:
                 print(f"Error loading sprite {sprite_path}: {e}")
-    
-    def set_sprite(self, side):
-        '''Загружает и масштабирует спрайт покемона'''
-        image = self.json['sprites'][side]
-        image_stream = urlopen(image).read()
-        image_file = io.BytesIO(image_stream)
-        self.image = pygame.image.load(image_file).convert_alpha()
-        scale = self.size / self.image.get_width()
-        new_width = self.image.get_width() * scale
-        new_height = self.image.get_height() * scale
-        self.image = pygame.transform.scale(self.image, (new_width, new_height))
-
-    def set_sprite(self, side):
-        '''Загружает и масштабирует спрайт покемона (используется как fallback)'''
-        image = self.json['sprites'][side]
-        image_stream = urlopen(image).read()
-        image_file = io.BytesIO(image_stream)
-        self.image = pygame.image.load(image_file).convert_alpha()
-        scale = self.size / self.image.get_width()
-        new_width = self.image.get_width() * scale
-        new_height = self.image.get_height() * scale
-        self.image = pygame.transform.scale(self.image, (new_width, new_height))
 
     def update_animation(self):
         '''Обновляет текущий кадр анимации'''
@@ -137,22 +100,13 @@ class Pokemon(pygame.sprite.Sprite):
             self.num_potions -= 1
 
     def set_moves(self):
-        '''Загружает атаки покемона из API'''
+        '''Загружает атаки покемона'''
         self.moves = []
-        for i in range(len(self.json['moves'])):
-            versions = self.json['moves'][i]['version_group_details']
-            for j in range(len(versions)):
-                version = versions[j]
-                if version['version_group']['name'] != 'red-blue':
-                    continue
-                learn_method = version['move_learn_method']['name']
-                if learn_method != 'level-up':
-                    continue
-                level_learned = version['level_learned_at']
-                if self.level >= level_learned:
-                    move = Move(self.json['moves'][i]['move']['url'])
-                    if move.power is not None:
-                        self.moves.append(move)
+        attaks = self.data['Attacks']
+        for attak in attaks:
+            move = Move(attak)
+            if move.power is not None:
+                self.moves.append(move)
         if len(self.moves) > 4:
             self.moves = random.sample(self.moves, 4)
 

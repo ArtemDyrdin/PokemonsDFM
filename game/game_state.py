@@ -1,4 +1,5 @@
 from pokemon import Pokemon
+import json
 
 class GameState:
     def __init__(self):
@@ -7,10 +8,14 @@ class GameState:
         
     def reset_game(self):
         """Сброс состояния игры для новой битвы"""
+        # Загрузка данных из JSON-файла
+        with open('pokemons-info.json', 'r') as file:
+            data = json.load(file)
+
         self.pokemons = [
-            Pokemon('Bulbasaur', self.level, 25, 150),
-            Pokemon('Charmander', self.level, 175, 150),
-            Pokemon('Squirtle', self.level, 325, 150)
+            Pokemon('Bulbasaur', self.level, 25, 150, data),
+            Pokemon('Charmander', self.level, 175, 150, data),
+            Pokemon('Squirtle', self.level, 325, 150, data)
         ]
         self.player1_pokemon = None
         self.player2_pokemon = None

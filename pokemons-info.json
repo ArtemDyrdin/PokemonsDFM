@@ -1,0 +1,81 @@
+{
+    "Bulbasaur": {
+      "Name": "Bulbasaur",
+      "Types": ["Grass", "Poison"],
+      "HP": 45,
+      "Attack": 49,
+      "Defense": 49,
+      "Speed": 45,
+      "Info": "A strange seed was planted on its back at birth...",
+      "Attacks": [
+        {
+          "Name": "Tackle",
+          "Power": 40,
+          "Type": "Normal"
+        },
+        {
+          "Name": "Vine Whip",
+          "Power": 45,
+          "Type": "Grass"
+        },
+        {
+          "Name": "Poison Powder",
+          "Power": 0,
+          "Type": "Poison",
+          "Effect": "Poisons the target"
+        }
+      ]
+    },
+    "Charmander": {
+      "Name": "Charmander",
+      "Types": ["Fire"],
+      "HP": 39,
+      "Attack": 52,
+      "Defense": 43,
+      "Speed": 65,
+      "Info": "Obviously prefers hot places...",
+      "Attacks": [
+        {
+          "Name": "Scratch",
+          "Power": 40,
+          "Type": "Normal"
+        },
+        {
+          "Name": "Ember",
+          "Power": 40,
+          "Type": "Fire"
+        },
+        {
+          "Name": "Fire Fang",
+          "Power": 65,
+          "Type": "Fire"
+        }
+      ]
+    },
+    "Squirtle": {
+      "Name": "Squirtle",
+      "Types": ["Water"],
+      "HP": 44,
+      "Attack": 48,
+      "Defense": 65,
+      "Speed": 43,
+      "Info": "After birth, its back swells...",
+      "Attacks": [
+        {
+          "Name": "Tackle",
+          "Power": 40,
+          "Type": "Normal"
+        },
+        {
+          "Name": "Water Gun",
+          "Power": 40,
+          "Type": "Water"
+        },
+        {
+          "Name": "Bubble",
+          "Power": 40,
+          "Type": "Water"
+        }
+      ]
+    }
+  }
