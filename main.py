@@ -23,6 +23,9 @@ def draw_main_menu():
     game.fill(WHITE)
     game.blit(menu_back,(0,0))
     
+    game.fill(WHITE)
+    game.blit(menu_back,(0,0))
+    
     # Рисуем заголовок
     title_font = pygame.font.Font(font_path2, 195) #150 было 
     title_text = title_font.render("Pokemon Battle", True, WHITE) #Pokemon Battle

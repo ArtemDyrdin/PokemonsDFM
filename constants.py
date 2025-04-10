@@ -13,7 +13,3 @@ RED = (200, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 200)
 
-# Базовый URL API
-BASE_URL = 'https://pokeapi.co/api/v2'
-
-button_img = 'res/button_img.png'
