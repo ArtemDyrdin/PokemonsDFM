@@ -11,35 +11,51 @@ pygame.init()
 
 # Установка игрового окна
 game = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
+menu_back = pygame.image.load("res/start.png") 
+button_img = pygame.image.load("res/button_img.png")
+button_img = pygame.transform.scale(button_img,(500,178))
 pygame.display.set_caption('Pokemon Battle')
+font_path2 = "res/pokemon_fire_red.ttf"
+font_path = "res/rus3.ttf"
+
 
 def draw_main_menu():
     game.fill(WHITE)
+    game.blit(menu_back,(0,0))
     
     # Рисуем заголовок
-    title_font = pygame.font.Font(None, 48)
-    title_text = title_font.render("Pokemon Battle", True, BLACK)
-    game.blit(title_text, (GAME_WIDTH//2 - title_text.get_width()//2, 100))
+    title_font = pygame.font.Font(font_path2, 195) #150 было 
+    title_text = title_font.render("Pokemon Battle", True, WHITE) #Pokemon Battle
+    title_text_shade = title_font.render("Pokemon Battle", True,BLACK)
+    game.blit(title_text_shade, (GAME_WIDTH//2 - title_text.get_width()//2 + 5, GAME_HEIGHT//5 + 5))
+    game.blit(title_text, (GAME_WIDTH//2 - title_text.get_width()//2, GAME_HEIGHT//5))
     
     # Рисуем кнопки
-    button_font = pygame.font.Font(None, 36)
+    button_font = pygame.font.Font(font_path, 136) # 96 
     
     # Кнопка для файтинга
-    fight_button = pygame.Rect(GAME_WIDTH//2 - 150, 200, 300, 50)
-    pygame.draw.rect(game, RED, fight_button)
-    fight_text = button_font.render("Fight Mode", True, WHITE)
-    game.blit(fight_text, (GAME_WIDTH//2 - fight_text.get_width()//2, 215))
+    fight_button = pygame.Rect(GAME_WIDTH//2-250, GAME_HEIGHT//2-100, 500, 178)
+    #pygame.draw.rect(game,RED,fight_button)
+    fight_text = button_font.render("В бой", True, WHITE)
+    fight_text_shade = button_font.render("В бой", True, (107,107,106))
+    game.blit(button_img,(GAME_WIDTH//2-250, GAME_HEIGHT//2-100))
+    game.blit(fight_text_shade, (fight_button.centerx-fight_text.get_width()//2 + 4, fight_button.centery-fight_text.get_height()//1.3 + 3))
+    game.blit(fight_text, (fight_button.centerx-fight_text.get_width()//2, fight_button.centery-fight_text.get_height()//1.3))
     
     # Кнопка для просмотра характеристик
-    view_button = pygame.Rect(GAME_WIDTH//2 - 150, 300, 300, 50)
-    pygame.draw.rect(game, BLUE, view_button)
-    view_text = button_font.render("View Pokemon Stats", True, WHITE)
-    game.blit(view_text, (GAME_WIDTH//2 - view_text.get_width()//2, 315))
+    view_button = pygame.Rect(GAME_WIDTH//2-250, GAME_HEIGHT//1.45-100, 500, 178)
+    #pygame.draw.rect(game, BLUE, view_button)
+    view_text = button_font.render("Покемоны", True, WHITE)
+    view_text_shade = button_font.render("Покемоны", True, (107,107,106))
+    game.blit(button_img,(GAME_WIDTH//2-250, GAME_HEIGHT//1.45-100))
+    game.blit(view_text_shade, (view_button.centerx-view_text.get_width()//2 + 4, view_button.centery-view_text.get_height()//1.3 + 3))
+    game.blit(view_text, (view_button.centerx-view_text.get_width()//2, view_button.centery-view_text.get_height()//1.3))
     
     return fight_button, view_button
 
 def draw_pokemon_stats(game_state, current_pokemon_index):
     game.fill(WHITE)
+    game.blit(menu_back,(0,0))
     
     # Получаем текущего покемона
     pokemon = game_state.pokemons[current_pokemon_index]
@@ -55,23 +71,23 @@ def draw_pokemon_stats(game_state, current_pokemon_index):
     pokemon.x, pokemon.y = original_x, original_y
     
     # Рисуем характеристики
-    font = pygame.font.Font(None, 36)
+    font = pygame.font.Font(font_path, 36)
     
     # Имя покемона
-    name_text = font.render(f"Name: {pokemon.name}", True, BLACK)
+    name_text = font.render(f"Имя: {pokemon.name}", True, BLACK)
     game.blit(name_text, (50, 50))
     
     # Характеристики
-    hp_text = font.render(f"HP: {pokemon.max_hp}", True, BLACK)
+    hp_text = font.render(f"Здоровье: {pokemon.max_hp}", True, BLACK)
     game.blit(hp_text, (50, 100))
     
-    attack_text = font.render(f"Attack: {pokemon.attack}", True, BLACK)
+    attack_text = font.render(f"Атака: {pokemon.attack}", True, BLACK)
     game.blit(attack_text, (50, 150))
     
-    defense_text = font.render(f"Defense: {pokemon.defense}", True, BLACK)
+    defense_text = font.render(f"Защита: {pokemon.defense}", True, BLACK)
     game.blit(defense_text, (50, 200))
     
-    speed_text = font.render(f"Speed: {pokemon.speed}", True, BLACK)
+    speed_text = font.render(f"Скорость: {pokemon.speed}", True, BLACK)
     game.blit(speed_text, (50, 250))
     
     # Кнопки навигации

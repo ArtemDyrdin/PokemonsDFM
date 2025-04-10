@@ -1,8 +1,8 @@
 # constants.py
 
 # Размеры окна
-GAME_WIDTH = 500
-GAME_HEIGHT = 500
+GAME_WIDTH = 1920
+GAME_HEIGHT = 1080
 
 # Цвета
 BLACK = (0, 0, 0)
@@ -12,3 +12,8 @@ GREEN = (0, 200, 0)
 RED = (200, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 200)
+
+# Базовый URL API
+BASE_URL = 'https://pokeapi.co/api/v2'
+
+button_img = 'res/button_img.png'
