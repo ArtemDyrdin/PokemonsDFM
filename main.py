@@ -11,12 +11,27 @@ pygame.init()
 
 # Установка игрового окна
 game = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
+pygame.display.set_caption('Pokemon Battle')
+
+#менюшка
 menu_back = pygame.image.load("res/start.png") 
+
 button_img = pygame.image.load("res/button_img.png")
 button_img = pygame.transform.scale(button_img,(500,178))
-pygame.display.set_caption('Pokemon Battle')
+
 font_path2 = "res/pokemon_fire_red.ttf"
 font_path = "res/rus3.ttf"
+
+stat_img = pygame.image.load("res/stat_back.png")
+stat_img = pygame.transform.scale(stat_img,(1500,561))
+
+left_arr_img = pygame.image.load("res/left_arr.png")
+left_arr_img = pygame.transform.scale(left_arr_img,(115,178))
+
+right_arr_img = pygame.image.load("res/right_arr.png")
+right_arr_img = pygame.transform.scale(right_arr_img,(115,178))
+
+
 
 
 def draw_main_menu():
@@ -38,7 +53,7 @@ def draw_main_menu():
     
     # Кнопка для файтинга
     fight_button = pygame.Rect(GAME_WIDTH//2-250, GAME_HEIGHT//2-100, 500, 178)
-    #pygame.draw.rect(game,RED,fight_button)
+    pygame.draw.rect(game,RED,fight_button)
     fight_text = button_font.render("В бой", True, WHITE)
     fight_text_shade = button_font.render("В бой", True, (107,107,106))
     game.blit(button_img,(GAME_WIDTH//2-250, GAME_HEIGHT//2-100))
@@ -59,6 +74,8 @@ def draw_main_menu():
 def draw_pokemon_stats(game_state, current_pokemon_index):
     game.fill(WHITE)
     game.blit(menu_back,(0,0))
+    game.blit(stat_img,(GAME_WIDTH//2 - 750, GAME_HEIGHT//2-320))
+    
     
     # Получаем текущего покемона
     pokemon = game_state.pokemons[current_pokemon_index]
@@ -67,47 +84,60 @@ def draw_pokemon_stats(game_state, current_pokemon_index):
     original_x, original_y = pokemon.x, pokemon.y
     
     # Временно меняем координаты для отрисовки
-    pokemon.x, pokemon.y = GAME_WIDTH//2 - 50, 100
+    pokemon.x, pokemon.y = GAME_WIDTH//5-10, 340
     pokemon.draw(game)  # Теперь будет рисоваться в новых координатах
     
     # Восстанавливаем оригинальные координаты
     pokemon.x, pokemon.y = original_x, original_y
     
     # Рисуем характеристики
-    font = pygame.font.Font(font_path, 36)
+    font = pygame.font.Font(font_path, 140)
     
     # Имя покемона
-    name_text = font.render(f"Имя: {pokemon.name}", True, BLACK)
-    game.blit(name_text, (50, 50))
+    name_text = font.render(f"{pokemon.name}", True, BLACK)
+    name_text_2 = font.render(f"{pokemon.name}", True, WHITE)
+    name_text_shade = font.render(f"{pokemon.name}", True, (216,216,192))
+    game.blit(name_text, (GAME_WIDTH//5+30+4 , 200+4))
+    game.blit(name_text_2, (GAME_WIDTH//5+30 , 200))
+    game.blit(name_text_shade, (1285 +4 , 305 + 4))
+    game.blit(name_text, (1285, 305))
     
     # Характеристики
-    hp_text = font.render(f"Здоровье: {pokemon.max_hp}", True, BLACK)
-    game.blit(hp_text, (50, 100))
+    hp_text = font.render(f"{pokemon.max_hp}", True, BLACK)
+    hp_text_shade = font.render(f"{pokemon.max_hp}", True, (216,216,192))
+    game.blit(hp_text, (1400, 207))
     
-    attack_text = font.render(f"Атака: {pokemon.attack}", True, BLACK)
-    game.blit(attack_text, (50, 150))
+    attack_text = font.render(f"{pokemon.attack}", True, BLACK)
+    attack_text_shade = font.render(f"{pokemon.attack}", True, (216,216,192))
+    game.blit(attack_text, (1500, 417))
     
-    defense_text = font.render(f"Защита: {pokemon.defense}", True, BLACK)
-    game.blit(defense_text, (50, 200))
+    defense_text = font.render(f"{pokemon.defense}", True, BLACK)
+    degense_text_shade = font.render(f"{pokemon.defense}", True, (216,216,192))
+    game.blit(defense_text, (1500, 527))
     
-    speed_text = font.render(f"Скорость: {pokemon.speed}", True, BLACK)
-    game.blit(speed_text, (50, 250))
+    speed_text = font.render(f"{pokemon.speed}", True, BLACK)
+    game.blit(speed_text, (1500, 637))
     
     # Кнопки навигации
-    back_button = pygame.Rect(50, 350, 150, 50)
-    pygame.draw.rect(game, GREY, back_button)
-    back_text = font.render("Back", True, BLACK)
-    game.blit(back_text, (125 - back_text.get_width()//2, 365))
+    back_button = pygame.Rect(GAME_WIDTH//2 - 250, GAME_HEIGHT//1.2-110, 500, 178)
+    #pygame.draw.rect(game, GREY, back_button)
+    game.blit(button_img,(GAME_WIDTH//2 - 250, GAME_HEIGHT//1.2-110))
+    back_text = font.render("Back", True, WHITE)
+    back_text_shade = font.render("Back", True, (107,107,106))
+    game.blit(back_text_shade, (back_button.centerx-back_text.get_width()//2 + 4, back_button.centery-back_text.get_height()//1.3 + 3))
+    game.blit(back_text, (back_button.centerx-back_text.get_width()//2, back_button.centery-back_text.get_height()//1.3))
     
-    prev_button = pygame.Rect(250, 350, 50, 50)
-    pygame.draw.rect(game, BLUE, prev_button)
-    prev_text = font.render("<", True, WHITE)
-    game.blit(prev_text, (275 - prev_text.get_width()//2, 365))
+    prev_button = pygame.Rect(GAME_WIDTH//2 - 450, GAME_HEIGHT//1.2-110, 115, 178)
+   # pygame.draw.rect(game, BLUE, prev_button)
+    #prev_text = font.render("<", True, WHITE)
+    game.blit(left_arr_img, (GAME_WIDTH//2 - 450, GAME_HEIGHT//1.2-110))
+   # game.blit(prev_text, (275 - prev_text.get_width()//2, 365))
     
-    next_button = pygame.Rect(350, 350, 50, 50)
-    pygame.draw.rect(game, BLUE, next_button)
-    next_text = font.render(">", True, WHITE)
-    game.blit(next_text, (375 - next_text.get_width()//2, 365))
+    next_button = pygame.Rect(GAME_WIDTH//2 + 355, GAME_HEIGHT//1.2-110, 115, 178)
+   # pygame.draw.rect(game, BLUE, next_button)
+    game.blit(right_arr_img, (GAME_WIDTH//2 + 355, GAME_HEIGHT//1.2-110))
+   # next_text = font.render(">", True, WHITE)
+    #game.blit(next_text, (375 - next_text.get_width()//2, 365))
     
     return back_button, prev_button, next_button
 
@@ -175,6 +205,7 @@ def main():
         
         elif current_mode == "fight":
             game.fill(WHITE)
+            game.blit(menu_back,(0,0))
             
             if game_state.status in ['select pokemon 1', 'select pokemon 2']:
                 draw_selection_screen(game_state, game)

@@ -34,7 +34,7 @@ class Pokemon(pygame.sprite.Sprite):
         # сохрание типов покемона
         self.types = self.data['Types']
 
-        self.size = 150
+        self.size = 400
         self.load_sprites()
 
     def load_sprites(self):
