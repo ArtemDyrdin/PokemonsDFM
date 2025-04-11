@@ -47,6 +47,14 @@ class Pokemon(pygame.sprite.Sprite):
         self.load_heal_sprites()
         self.create_heal_fallback()
 
+        # Флаги состояний
+        self.is_attacking = False
+        self.attack_start_time = 0
+        self.attack_duration = 1000  # 1 секунда для атаки
+        self.message = None
+        self.message_start_time = 0
+        self.message_duration = 1000  # 1 секунда для сообщений
+
     def load_pokemon_data(self):
         '''Загрузка данных покемона с PokeAPI'''
         try:
@@ -146,7 +154,6 @@ class Pokemon(pygame.sprite.Sprite):
     def create_heal_fallback(self):
         """Создание резервной анимации исцеления"""
         if not self.heal_sprites:
-            colors = [(0, 255, 0, 50), (0, 200, 0, 100), (0, 150, 0, 150)]
             size = int(self.size * 0.8)
             for alpha in range(50, 251, 50):
                 surf = pygame.Surface((size, size), pygame.SRCALPHA)
@@ -195,7 +202,6 @@ class Pokemon(pygame.sprite.Sprite):
     def perform_attack(self, other, move, game):
         """Выполнение атаки"""
         display_message(f'{self.name} использует {move.name}!', game)
-        time.sleep(1)
         
         # Расчет урона
         base_damage = (2 * self.level + 10) / 250
@@ -208,7 +214,6 @@ class Pokemon(pygame.sprite.Sprite):
         
         other.take_damage(final_damage)
         display_message(f"Нанесено {final_damage} урона!", game)
-        time.sleep(1)
 
     def take_damage(self, damage):
         """Получение урона"""

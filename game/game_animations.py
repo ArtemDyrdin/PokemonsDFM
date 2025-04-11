@@ -13,7 +13,6 @@ def fade_in_pokemon(pokemon, game, message):
         display_message(message, game)
         alpha += 0.4
         pygame.display.update()
-    time.sleep(1)
 
 def draw_message(game_state, game):
     """Отображает текущее сообщение в верхней части экрана"""

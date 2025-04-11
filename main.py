@@ -177,7 +177,6 @@ def main():
                 # Определяем кто ходит первым по скорости
                 game_state.status = 'player 2 turn' if game_state.player2_pokemon.speed > game_state.player1_pokemon.speed else 'player 1 turn'
                 pygame.display.update()
-                time.sleep(1)
                 continue
             
             elif game_state.status in ['player 1 turn', 'player 2 turn', 'player 1 move', 'player 2 move']:
