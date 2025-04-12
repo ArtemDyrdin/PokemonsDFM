@@ -52,7 +52,7 @@ def draw_main_menu():
     game.blit(menu_back,(0,0))
     
     # Рисуем заголовок
-    title_font = pygame.font.Font(font_path2, 195) #150 было 
+    title_font = pygame.font.Font(font_path2, 195) 
     title_text = title_font.render("Pokemon Battle", True, WHITE) #Pokemon Battle
     title_text_shade = title_font.render("Pokemon Battle", True,BLACK)
     game.blit(title_text_shade, (GAME_WIDTH//2 - title_text.get_width()//2 + 5, GAME_HEIGHT//5 + 5))
@@ -83,10 +83,8 @@ def draw_main_menu():
 
 def draw_pokemon_stats(game_state, current_pokemon_index):
     
-    
     game.blit(menu_back,(0,0))
     game.blit(stat_img,(GAME_WIDTH//2 - 550, GAME_HEIGHT//2 - 410))
-    
     
     # Получаем текущего покемона
     pokemon = game_state.pokemons[current_pokemon_index]
@@ -185,12 +183,10 @@ def draw_pokemon_stats(game_state, current_pokemon_index):
     speed_text = font.render(f"{pokemon.speed}", True, BLACK)
     game.blit(speed_text, (1340, 372))
     
-    
     #Описание 
     description_text = font.render("Древний покемон, напоминающий сову", True, BLACK)
     game.blit(speed_text, (1340, 372))
     
-
     if(len(pokemon.types)) == 2:
         font2 = pygame.font.Font(font_path, 70)
         type_text = font2.render(f"{pokemon.types[0]},{pokemon.types[1]}", True, BLACK)
@@ -199,12 +195,9 @@ def draw_pokemon_stats(game_state, current_pokemon_index):
         font2 = pygame.font.Font(font_path, 112)
         type_text = font2.render(f"{pokemon.types[0]}", True, BLACK)
         game.blit(type_text , (1378-type_text.get_width()//2, 430))
-       
-
 
     # Кнопки навигации
     back_button = pygame.Rect(GAME_WIDTH//2 - 250, GAME_HEIGHT//1.2-110, 500, 178)
-    #pygame.draw.rect(game, GREY, back_button)
     game.blit(button_img,(GAME_WIDTH//2 - 250, GAME_HEIGHT//1.2-110))
     back_text = font.render("Назад", True, WHITE)
     back_text_shade = font.render("Назад", True, (107,107,106))
@@ -212,16 +205,10 @@ def draw_pokemon_stats(game_state, current_pokemon_index):
     game.blit(back_text, (back_button.centerx-back_text.get_width()//2, back_button.centery-back_text.get_height()//1.3))
     
     prev_button = pygame.Rect(GAME_WIDTH//2 - 450, GAME_HEIGHT//1.2-110, 115, 178)
-   # pygame.draw.rect(game, BLUE, prev_button)
-    #prev_text = font.render("<", True, WHITE)
     game.blit(left_arr_img, (GAME_WIDTH//2 - 450, GAME_HEIGHT//1.2-110))
-   # game.blit(prev_text, (275 - prev_text.get_width()//2, 365))
     
     next_button = pygame.Rect(GAME_WIDTH//2 + 355, GAME_HEIGHT//1.2-110, 115, 178)
-   # pygame.draw.rect(game, BLUE, next_button)
     game.blit(right_arr_img, (GAME_WIDTH//2 + 355, GAME_HEIGHT//1.2-110))
-   # next_text = font.render(">", True, WHITE)
-    #game.blit(next_text, (375 - next_text.get_width()//2, 365))
     
     return back_button, prev_button, next_button
 
@@ -267,8 +254,6 @@ def main():
     game_state = GameState()
     current_mode = "main_menu"  # Возможные значения: "main_menu", "fight", "view_stats"
     current_pokemon_index = 0  # Для режима просмотра характеристик
-    gameover_buttons_surface = None
-    gameover_buttons = None
     
     
     # Главный игровой цикл
@@ -320,6 +305,7 @@ def main():
                         current_pokemon_index = (current_pokemon_index + 1) % len(game_state.pokemons)
                     elif event.key == K_ESCAPE:
                         current_mode = "main_menu"
+
         # Отрисовка игры
         if current_mode == "main_menu":
             draw_main_menu()
@@ -334,15 +320,10 @@ def main():
                 draw_selection_screen(game_state, game)
             
             elif game_state.status == 'prebattle':
-                #game_state.player1_pokemon.draw(game)
-                #draw_message(game_state, game)
-                #pygame.display.update()
                 game_state.status = 'start battle'
                 
-               
-            
             elif game_state.status == 'start battle':
-                               
+
                 game.blit(fightbackground_img,(0,0))
                 game.blit(battlefields_img,(360,180))
                 game.blit(menubar1_img,(360,180+561))
