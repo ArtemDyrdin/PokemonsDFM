@@ -348,8 +348,10 @@ def main():
                 game.blit(menubar1_img,(360,180+561))
                 game.blit(menubar2_img,(960,180+561))     
                 
-                #fade_in_pokemon(game_state.player2_pokemon, game, f'Player 2 sent out {game_state.player2_pokemon.name}!')
-                #fade_in_pokemon(game_state.player1_pokemon, game, f'Player 1 sent out {game_state.player1_pokemon.name}!')
+# =============================================================================
+#                 fade_in_pokemon(game_state.player2_pokemon, game, f'Player 2 sent out {game_state.player2_pokemon.name}!')
+#                 fade_in_pokemon(game_state.player1_pokemon, game, f'Player 1 sent out {game_state.player1_pokemon.name}!')
+# =============================================================================
                 
                 game_state.player1_pokemon.draw_hp(game)
                 game_state.player2_pokemon.draw_hp(game)
