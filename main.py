@@ -150,12 +150,19 @@ def draw_pokemon_stats(game_state, current_pokemon_index):
         
     elif(pokemon.name == "Squirtle"):
         
-        name_text = font.render("NAME", True, BLACK)
-        name_text_2 = font.render("NAME", True, WHITE)
-        name_text_shade = font.render("NAME", True, (216,216,192))
+        name_text = font.render("Матультор", True, BLACK)
+        name_text_2 = font.render("Матультор", True, WHITE)
+        name_text_shade = font.render("Матультор", True, (216,216,192))
         
         game.blit(name_text, (684 - name_text.get_width()//2+4  , 105+4))
         game.blit(name_text_2, (684 - name_text.get_width()//2 , 105))
+        
+        description_text1 = desk_font.render("Главный фокусник сея физмата. Он может, нажав на кнопку,", True, BLACK)
+        description_text2 = desk_font.render("немного видеоизменять пространство, например, размеры", True, BLACK)
+        description_text3 = desk_font.render("других покемонов.", True, BLACK)
+        game.blit(description_text1, (450, 570))
+        game.blit(description_text2, (450, 635))
+        game.blit(description_text3, (450, 700))
         
         #419+265 GAME_WIDTH//2-12
         
@@ -218,10 +225,51 @@ def draw_pokemon_stats(game_state, current_pokemon_index):
     
     return back_button, prev_button, next_button
 
+
+
+def draw_gameover_buttons(surface):
+    """Отрисовка кнопок для экрана завершения игры и возврат их Rect"""
+    button_width = 500  # Увеличим размер кнопок для удобства
+    button_height = 178
+    spacing = 20
+    
+    # Кнопка "Играть снова"
+    replay_btn = pygame.Rect(
+        GAME_WIDTH//2 - button_width - spacing//2,
+        GAME_HEIGHT//2 - button_height//2,
+        button_width,
+        button_height
+    )
+    pygame.draw.rect(surface, (0,0,0,0), replay_btn)  # Прозрачный фон
+    game.blit(button_img, (replay_btn.x, replay_btn.y))
+    
+    # Кнопка "Выход"
+    quit_btn = pygame.Rect(
+        GAME_WIDTH//2 + spacing//2,
+        GAME_HEIGHT//2 - button_height//2,
+        button_width,
+        button_height
+    )
+    pygame.draw.rect(surface, (0,0,0,0), quit_btn)
+    game.blit(button_img, (quit_btn.x, quit_btn.y))
+    
+    # Текст на кнопках
+    font = pygame.font.Font(font_path, 96)
+    replay_text = font.render("Play Again", True, WHITE)
+    quit_text = font.render("Main Menu", True, WHITE)
+    
+    surface.blit(replay_text, (replay_btn.x + 50, replay_btn.y + 50))
+    surface.blit(quit_text, (quit_btn.x + 50, quit_btn.y + 50))
+    
+    return replay_btn, quit_btn
+
 def main():
     game_state = GameState()
     current_mode = "main_menu"  # Возможные значения: "main_menu", "fight", "view_stats"
     current_pokemon_index = 0  # Для режима просмотра характеристик
+    gameover_buttons_surface = None
+    gameover_buttons = None
+    
     
     # Главный игровой цикл
     while game_state.status != 'quit':
@@ -309,21 +357,20 @@ def main():
                 # Определяем кто ходит первым по скорости
                 game_state.status = 'player 2 turn' if game_state.player2_pokemon.speed > game_state.player1_pokemon.speed else 'player 1 turn'
                 pygame.display.update()
-                #time.sleep(1)
-                #continue
+                
             
             elif game_state.status in ['player 1 turn', 'player 2 turn', 'player 1 move', 'player 2 move']:
                 draw_battle_ui(game_state, game)
             
             elif game_state.status == 'fainted':
                 handle_fainted_state(game_state, game)
-            
+
             elif game_state.status == 'gameover':
-                if game_state.player2_pokemon.current_hp == 0:
-                    
-                    display_message('Игрок 1 победил! Сыграть снова? (Y/N)?', game)
-                else:
-                    display_message('Игрок 2 победил! Сыграть снова? (Y/N)?', game)
+                
+                game_state.status = "main_menu"
+                game_state.reset_game()
+                current_mode = "main_menu"
+
         
         pygame.display.update()
     
