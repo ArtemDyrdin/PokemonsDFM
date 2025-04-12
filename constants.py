@@ -1,3 +1,5 @@
+import pygame
+
 # constants.py
 
 # Размеры окна
@@ -12,4 +14,7 @@ GREEN = (0, 200, 0)
 RED = (200, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 200)
+
+font_path2 = "res/pokemon_fire_red.ttf"
+font_path = "res/rus3.ttf"
 

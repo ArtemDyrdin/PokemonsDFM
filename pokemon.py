@@ -8,6 +8,13 @@ from move import Move
 from ui import display_message
 import time
 
+
+hpbar1_img = pygame.image.load("res/hp_bar1.png")
+hpbar1_img = pygame.transform.scale(hpbar1_img,(520,186))
+
+hpbar2_img = pygame.image.load("res/hp_bar2.png")
+hpbar2_img = pygame.transform.scale(hpbar2_img,(520,151))
+
 class Pokemon(pygame.sprite.Sprite):
     def __init__(self, name, level, x, y, data):
         '''Установка имени, уровня, позиции на экране и количество зелий покемона'''
@@ -34,7 +41,7 @@ class Pokemon(pygame.sprite.Sprite):
         # сохрание типов покемона
         self.types = self.data['Types']
 
-        self.size = 400
+        self.size = 300
         self.load_sprites()
 
     def load_sprites(self):
@@ -75,7 +82,7 @@ class Pokemon(pygame.sprite.Sprite):
     def perform_attack(self, other, move, game):
         '''Выполняет атаку на другого покемона'''
         display_message(f'{self.name} used {move.name}', game)
-        time.sleep(2)
+        #time.sleep(2)
         damage = (2 * self.level + 10) / 250 * self.attack / other.defense * move.power
         if move.type in self.types:
             damage *= 1.5
@@ -112,19 +119,22 @@ class Pokemon(pygame.sprite.Sprite):
 
     def draw_hp(self, game):
         '''Отрисовывает полоску здоровья покемона'''
-        bar_scale = 200 // self.max_hp
+       # game.blit(hpbar1_img,(970, 550))    
+        bar_scale = 243 / self.max_hp
+        print(bar_scale)
         for i in range(self.max_hp):
-            bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 20)
+            bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 15)
             pygame.draw.rect(game, RED, bar)
         for i in range(self.current_hp):
-            bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 20)
+            bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 15)
             pygame.draw.rect(game, GREEN, bar)
-        font = pygame.font.Font(pygame.font.get_default_font(), 16)
+        font = pygame.font.Font(pygame.font.get_default_font(), 20)
         text = font.render(f'HP: {self.current_hp} / {self.max_hp}', True, BLACK)
         text_rect = text.get_rect()
         text_rect.x = self.hp_x
         text_rect.y = self.hp_y + 30
         game.blit(text, text_rect)
+        #game.blit(hpbar1_img,(970, 550)) 
 
     def get_rect(self):
         '''Получить параметры прямоугольника спрайта покемона'''

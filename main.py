@@ -13,32 +13,40 @@ pygame.init()
 game = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 pygame.display.set_caption('Pokemon Battle')
 
-#менюшка
-menu_back = pygame.image.load("res/start.png") 
+menu_back = pygame.image.load("res/start.png").convert_alpha()
 
-button_img = pygame.image.load("res/button_img.png")
+
+button_img = pygame.image.load("res/button_img.png").convert_alpha()
 button_img = pygame.transform.scale(button_img,(500,178))
 
-font_path2 = "res/pokemon_fire_red.ttf"
-font_path = "res/rus3.ttf"
 
-stat_img = pygame.image.load("res/stat_back.png")
-stat_img = pygame.transform.scale(stat_img,(1500,561))
+stat_img = pygame.image.load("res/stat_nice.png").convert_alpha()
+stat_img = pygame.transform.scale(stat_img,(1100,651))
 
-left_arr_img = pygame.image.load("res/left_arr.png")
+left_arr_img = pygame.image.load("res/left_arr.png").convert_alpha()
 left_arr_img = pygame.transform.scale(left_arr_img,(115,178))
 
-right_arr_img = pygame.image.load("res/right_arr.png")
+right_arr_img = pygame.image.load("res/right_arr.png").convert_alpha()
 right_arr_img = pygame.transform.scale(right_arr_img,(115,178))
 
+battlefields_img = pygame.image.load("res/battle_back.png").convert_alpha()
+battlefields_img = pygame.transform.scale(battlefields_img,(1200,561))
+
+menubar1_img =  pygame.image.load("res/menubar1.png").convert_alpha()
+menubar1_img = pygame.transform.scale(menubar1_img,(1200,240))
+
+menubar2_img =  pygame.image.load("res/menubar2.png").convert_alpha()
+menubar2_img = pygame.transform.scale(menubar2_img,(600,240))
+
+fightbackground_img = pygame.image.load("res/fightbackground.png").convert_alpha()
+fightbackground_img = pygame.transform.scale(fightbackground_img,(1920,1280))
+
+pygame.event.set_allowed([pygame.QUIT, MOUSEBUTTONDOWN,KEYDOWN])
 
 
 
 def draw_main_menu():
-    game.fill(WHITE)
-    game.blit(menu_back,(0,0))
     
-    game.fill(WHITE)
     game.blit(menu_back,(0,0))
     
     # Рисуем заголовок
@@ -68,13 +76,14 @@ def draw_main_menu():
     game.blit(button_img,(GAME_WIDTH//2-250, GAME_HEIGHT//1.45-100))
     game.blit(view_text_shade, (view_button.centerx-view_text.get_width()//2 + 4, view_button.centery-view_text.get_height()//1.3 + 3))
     game.blit(view_text, (view_button.centerx-view_text.get_width()//2, view_button.centery-view_text.get_height()//1.3))
-    
+
     return fight_button, view_button
 
 def draw_pokemon_stats(game_state, current_pokemon_index):
-    game.fill(WHITE)
+    
+    
     game.blit(menu_back,(0,0))
-    game.blit(stat_img,(GAME_WIDTH//2 - 750, GAME_HEIGHT//2-320))
+    game.blit(stat_img,(GAME_WIDTH//2 - 550, GAME_HEIGHT//2 - 410))
     
     
     # Получаем текущего покемона
@@ -84,46 +93,112 @@ def draw_pokemon_stats(game_state, current_pokemon_index):
     original_x, original_y = pokemon.x, pokemon.y
     
     # Временно меняем координаты для отрисовки
-    pokemon.x, pokemon.y = GAME_WIDTH//5-10, 340
+    pokemon.x, pokemon.y = GAME_WIDTH//4+45, 200
     pokemon.draw(game)  # Теперь будет рисоваться в новых координатах
     
     # Восстанавливаем оригинальные координаты
     pokemon.x, pokemon.y = original_x, original_y
     
     # Рисуем характеристики
-    font = pygame.font.Font(font_path, 140)
+    font = pygame.font.Font(font_path, 112)
+    desk_font = pygame.font.Font(font_path, 65)
     
     # Имя покемона
-    name_text = font.render(f"{pokemon.name}", True, BLACK)
-    name_text_2 = font.render(f"{pokemon.name}", True, WHITE)
-    name_text_shade = font.render(f"{pokemon.name}", True, (216,216,192))
-    game.blit(name_text, (GAME_WIDTH//5+30+4 , 200+4))
-    game.blit(name_text_2, (GAME_WIDTH//5+30 , 200))
-    game.blit(name_text_shade, (1285 +4 , 305 + 4))
-    game.blit(name_text, (1285, 305))
+    if(pokemon.name == "Bulbasaur"):
+        
+        name_text = font.render("Физтрон", True, BLACK)
+        name_text_2 = font.render("Физтрон", True, WHITE)
+        name_text_shade = font.render("Физтрон", True, (216,216,192))
+        
+        game.blit(name_text, (684 - name_text.get_width()//2+4  , 105+3))
+        game.blit(name_text_2, (684 - name_text.get_width()//2 , 105))
+        
+        description_text1 = desk_font.render("Он создан в высокоэнергетической лаборатории. Способен", True, BLACK)
+        description_text2 = desk_font.render("разгонятся до невероятных скоростей, вызывая электрические", True, BLACK)
+        description_text3 = desk_font.render("всплески.", True, BLACK)
+        game.blit(description_text1, (450, 570))
+        game.blit(description_text2, (450, 635))
+        game.blit(description_text3, (450, 700))
+        
+        #419+265 GAME_WIDTH//2-12
+        
+        game.blit(name_text_shade, (1180 +4 , 113 + 3))
+        game.blit(name_text, (1180, 113))
+        
+    elif(pokemon.name == "Charmander"):
+        
+        name_text = font.render("Филинарий", True, BLACK)
+        name_text_2 = font.render("Филинарий", True, WHITE)
+        name_text_shade = font.render("Филинарий", True, (216,216,192))
+        
+        game.blit(name_text, (684 - name_text.get_width()//2+4  , 105+4))
+        game.blit(name_text_2, (684 - name_text.get_width()//2 , 105))
+        
+        #419+265 GAME_WIDTH//2-12
+        
+        description_text1 = desk_font.render("Древний покемон, напоминающий сову, встроенную в античную", True, BLACK)
+        description_text2 = desk_font.render("колонну. Способен передавать знания телепатически и является", True, BLACK)
+        description_text3 = desk_font.render("тем, кто заблудился в раздумьях.", True, BLACK)
+        game.blit(description_text1, (450, 570))
+        game.blit(description_text2, (450, 635))
+        game.blit(description_text3, (450, 700))
+        
+        game.blit(name_text_shade, (1180 +4 , 113 + 4))
+        game.blit(name_text, (1180, 113))
+        
+    elif(pokemon.name == "Squirtle"):
+        
+        name_text = font.render("NAME", True, BLACK)
+        name_text_2 = font.render("NAME", True, WHITE)
+        name_text_shade = font.render("NAME", True, (216,216,192))
+        
+        game.blit(name_text, (684 - name_text.get_width()//2+4  , 105+4))
+        game.blit(name_text_2, (684 - name_text.get_width()//2 , 105))
+        
+        #419+265 GAME_WIDTH//2-12
+        
+        game.blit(name_text_shade, (1180 +4 , 113 + 4))
+        game.blit(name_text, (1180, 113))
     
     # Характеристики
     hp_text = font.render(f"{pokemon.max_hp}", True, BLACK)
     hp_text_shade = font.render(f"{pokemon.max_hp}", True, (216,216,192))
-    game.blit(hp_text, (1400, 207))
+    game.blit(hp_text, (1340, 195))
     
     attack_text = font.render(f"{pokemon.attack}", True, BLACK)
     attack_text_shade = font.render(f"{pokemon.attack}", True, (216,216,192))
-    game.blit(attack_text, (1500, 417))
+    game.blit(attack_text, (1340, 255))
     
     defense_text = font.render(f"{pokemon.defense}", True, BLACK)
     degense_text_shade = font.render(f"{pokemon.defense}", True, (216,216,192))
-    game.blit(defense_text, (1500, 527))
+    game.blit(defense_text, (1340, 313))
     
     speed_text = font.render(f"{pokemon.speed}", True, BLACK)
-    game.blit(speed_text, (1500, 637))
+    game.blit(speed_text, (1340, 372))
     
+    
+    #Описание 
+    description_text = font.render("Древний покемон, напоминающий сову", True, BLACK)
+    game.blit(speed_text, (1340, 372))
+    
+
+    if(len(pokemon.types)) == 2:
+        font2 = pygame.font.Font(font_path, 70)
+        type_text = font2.render(f"{pokemon.types[0]},{pokemon.types[1]}", True, BLACK)
+        game.blit(type_text , (1265, 455))
+    else: 
+        font2 = pygame.font.Font(font_path, 112)
+        type_text = font2.render(f"{pokemon.types[0]}", True, BLACK)
+        game.blit(type_text , (1378-type_text.get_width()//2, 430))
+       
+
+
     # Кнопки навигации
     back_button = pygame.Rect(GAME_WIDTH//2 - 250, GAME_HEIGHT//1.2-110, 500, 178)
     #pygame.draw.rect(game, GREY, back_button)
     game.blit(button_img,(GAME_WIDTH//2 - 250, GAME_HEIGHT//1.2-110))
-    back_text = font.render("Back", True, WHITE)
-    back_text_shade = font.render("Back", True, (107,107,106))
+    back_text = font.render("Назад", True, WHITE)
+    back_text_shade = font.render("Назад", True, (107,107,106))
     game.blit(back_text_shade, (back_button.centerx-back_text.get_width()//2 + 4, back_button.centery-back_text.get_height()//1.3 + 3))
     game.blit(back_text, (back_button.centerx-back_text.get_width()//2, back_button.centery-back_text.get_height()//1.3))
     
@@ -195,7 +270,6 @@ def main():
                         current_pokemon_index = (current_pokemon_index + 1) % len(game_state.pokemons)
                     elif event.key == K_ESCAPE:
                         current_mode = "main_menu"
-        
         # Отрисовка игры
         if current_mode == "main_menu":
             draw_main_menu()
@@ -204,22 +278,28 @@ def main():
             draw_pokemon_stats(game_state, current_pokemon_index)
         
         elif current_mode == "fight":
-            game.fill(WHITE)
             game.blit(menu_back,(0,0))
             
             if game_state.status in ['select pokemon 1', 'select pokemon 2']:
                 draw_selection_screen(game_state, game)
             
             elif game_state.status == 'prebattle':
-                game_state.player1_pokemon.draw(game)
-                draw_message(game_state, game)
-                pygame.display.update()
+                #game_state.player1_pokemon.draw(game)
+                #draw_message(game_state, game)
+                #pygame.display.update()
                 game_state.status = 'start battle'
-                continue
+                
+               
             
             elif game_state.status == 'start battle':
-                fade_in_pokemon(game_state.player2_pokemon, game, f'Player 2 sent out {game_state.player2_pokemon.name}!')
-                fade_in_pokemon(game_state.player1_pokemon, game, f'Player 1 sent out {game_state.player1_pokemon.name}!')
+                               
+                game.blit(fightbackground_img,(0,0))
+                game.blit(battlefields_img,(360,180))
+                game.blit(menubar1_img,(360,180+561))
+                game.blit(menubar2_img,(960,180+561))     
+                
+                #fade_in_pokemon(game_state.player2_pokemon, game, f'Player 2 sent out {game_state.player2_pokemon.name}!')
+                #fade_in_pokemon(game_state.player1_pokemon, game, f'Player 1 sent out {game_state.player1_pokemon.name}!')
                 
                 game_state.player1_pokemon.draw_hp(game)
                 game_state.player2_pokemon.draw_hp(game)
@@ -227,8 +307,8 @@ def main():
                 # Определяем кто ходит первым по скорости
                 game_state.status = 'player 2 turn' if game_state.player2_pokemon.speed > game_state.player1_pokemon.speed else 'player 1 turn'
                 pygame.display.update()
-                time.sleep(1)
-                continue
+                #time.sleep(1)
+                #continue
             
             elif game_state.status in ['player 1 turn', 'player 2 turn', 'player 1 move', 'player 2 move']:
                 draw_battle_ui(game_state, game)
