@@ -21,6 +21,9 @@ menu_back = pygame.image.load("res/start.png").convert_alpha()
 button_img = pygame.image.load("res/button_img.png").convert_alpha()
 button_img = pygame.transform.scale(button_img,(500,178))
 
+button2_img = pygame.image.load("res/button2_img.png").convert_alpha()
+button2_img = pygame.transform.scale(button_img,(500,178))
+
 
 stat_img = pygame.image.load("res/stat_nice.png").convert_alpha()
 stat_img = pygame.transform.scale(stat_img,(1100,651))
@@ -278,6 +281,9 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 game_state.status = 'quit'
+                
+        
+            
             
             elif event.type == MOUSEBUTTONDOWN:
                 mouse_click = event.pos
@@ -285,6 +291,8 @@ def main():
                 if current_mode == "main_menu":
                     fight_button, view_button = draw_main_menu()
                     if fight_button.collidepoint(mouse_click):
+                       # game.blit(button_img,(GAME_WIDTH//2-250, GAME_HEIGHT//2-100))
+                       
                         current_mode = "fight"
                         game_state.status = "select pokemon 1"
                     elif view_button.collidepoint(mouse_click):

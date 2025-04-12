@@ -144,7 +144,7 @@ def draw_battle_ui(game_state, game):
         
         # Отображение подсказки
         font = pygame.font.Font(font_path, 96)
-        action = "Выберите атака" if 'move' in game_state.status else "Выберите действие"
+        action = "Выберите атаку" if 'move' in game_state.status else "Выберите действие"
         text = font.render(f"Ход {player_num}-го игрока - {action}", True, BLACK)
         game.blit(text, (500, 100))
         
