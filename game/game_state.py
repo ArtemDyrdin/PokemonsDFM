@@ -13,9 +13,9 @@ class GameState:
             data = json.load(file)
 
         self.pokemons = [
-            Pokemon('Bulbasaur', self.level, 25, 150, data),
-            Pokemon('Charmander', self.level, 175, 150, data),
-            Pokemon('Squirtle', self.level, 325, 150, data)
+            Pokemon('Bulbasaur', self.level, 400, 300, data),
+            Pokemon('Charmander', self.level, 850, 300, data),
+            Pokemon('Squirtle', self.level, 1300,300, data)
         ]
         self.player1_pokemon = None
         self.player2_pokemon = None
@@ -30,7 +30,7 @@ class GameState:
 def init_battle_positions(game_state):
     """Устанавливает позиции покемонов для битвы"""
     game_state.player1_pokemon.hp_x, game_state.player1_pokemon.hp_y = 1208, 636
-    game_state.player2_pokemon.hp_x, game_state.player2_pokemon.hp_y = 755, 340
+    game_state.player2_pokemon.hp_x, game_state.player2_pokemon.hp_y = 750, 339
     
     game_state.player1_pokemon.x = 520
     game_state.player1_pokemon.y = 460

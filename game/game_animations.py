@@ -13,6 +13,15 @@ battle_surf = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 font_path2 = "res/pokemon_fire_red.ttf"
 font_path = "res/rus3.ttf"
 
+def init_resources():
+    global battlefields_img, menubar1_img, menubar2_img, fightbackground_img, hpbar1_img, hpbar2_img
+    battlefields_img = battlefields_img.convert_alpha()
+    menubar1_img = menubar1_img.convert_alpha()
+    menubar2_img = menubar2_img.convert_alpha()
+    fightbackground_img = fightbackground_img.convert_alpha()
+    hpbar1_img = hpbar1_img.convert_alpha()
+    hpbar2_img = hpbar2_img.convert_alpha()
+
 
 
 battlefields_img = pygame.image.load("res/battle_back.png")
@@ -31,9 +40,7 @@ hpbar1_img = pygame.image.load("res/hp_bar1.png")
 hpbar1_img = pygame.transform.scale(hpbar1_img,(520,186))
 
 hpbar2_img = pygame.image.load("res/hp_bar2.png")
-hpbar2_img = pygame.transform.scale(hpbar2_img,(520,151))
-
-
+hpbar2_img = pygame.transform.scale(hpbar2_img,(510,149))
 
 
 
@@ -61,9 +68,9 @@ def draw_message(game_state, game):
 
 def draw_selection_screen(game_state, game):
     """Отрисовка экрана выбора покемона"""
-    font = pygame.font.Font(font_path, 36)
-    text = font.render('Select your Pokemon', True, BLACK)
-    game.blit(text, (GAME_WIDTH//2 - text.get_width()//2, 50))
+    font = pygame.font.Font(font_path, 100)
+    text = font.render('Выбери своего покемона', True, BLACK)
+    game.blit(text, (GAME_WIDTH//2 - text.get_width()//2, 200))
     
     for pokemon in game_state.pokemons:
         pokemon.draw(game)
@@ -78,6 +85,13 @@ def draw_selection_screen(game_state, game):
 def draw_battle_ui(game_state, game):
     """Отрисовка интерфейса битвы"""
     # Отрисовка покемонов и их HP
+    
+    
+    name1_font = pygame.font.Font(font_path2, 90) #150 было 
+    name1_text = name1_font.render(f"{game_state.player1_pokemon.name}", True, BLACK) 
+    name2_text = name1_font.render(f"{game_state.player2_pokemon.name}", True, BLACK) 
+    
+   # game.blit(title_text, (GAME_WIDTH//2 - title_text.get_width()//2, GAME_HEIGHT//5))
     
     global battle_surf_flag
     
@@ -95,6 +109,10 @@ def draw_battle_ui(game_state, game):
         battle_sufr_flag = 1
         
     game.blit(battle_surf,(0,0))
+    
+    
+    game.blit(name2_text, (580, 245))
+    game.blit(name1_text, (1040, 550))
         
 
     

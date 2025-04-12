@@ -13,7 +13,7 @@ hpbar1_img = pygame.image.load("res/hp_bar1.png")
 hpbar1_img = pygame.transform.scale(hpbar1_img,(520,186))
 
 hpbar2_img = pygame.image.load("res/hp_bar2.png")
-hpbar2_img = pygame.transform.scale(hpbar2_img,(520,151))
+hpbar2_img = pygame.transform.scale(hpbar2_img,(510,149))
 
 class Pokemon(pygame.sprite.Sprite):
     def __init__(self, name, level, x, y, data):
@@ -128,13 +128,12 @@ class Pokemon(pygame.sprite.Sprite):
         for i in range(self.current_hp):
             bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 15)
             pygame.draw.rect(game, GREEN, bar)
-        font = pygame.font.Font(pygame.font.get_default_font(), 20)
-        text = font.render(f'HP: {self.current_hp} / {self.max_hp}', True, BLACK)
-        text_rect = text.get_rect()
-        text_rect.x = self.hp_x
-        text_rect.y = self.hp_y + 30
-        game.blit(text, text_rect)
-        #game.blit(hpbar1_img,(970, 550)) 
+       # font = pygame.font.Font(pygame.font.get_default_font(), 20)
+       # text = font.render(f'HP: {self.current_hp} / {self.max_hp}', True, BLACK)
+       # text_rect = text.get_rect()
+       # text_rect.x = self.hp_x
+        #text_rect.y = self.hp_y + 30
+        #game.blit(text, text_rect)
 
     def get_rect(self):
         '''Получить параметры прямоугольника спрайта покемона'''

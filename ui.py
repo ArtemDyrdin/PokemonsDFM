@@ -6,13 +6,13 @@ from constants import *
 
 def display_message(message, game):
     '''Отображает сообщение в нижней части экрана'''
-    pygame.draw.rect(game, WHITE, (10, 350, 480, 140))
-    pygame.draw.rect(game, BLACK, (10, 350, 480, 140), 3)
-    font = pygame.font.Font(pygame.font.get_default_font(), 20)
+   # pygame.draw.rect(game, WHITE, (720, 350, 480, 140))
+   # pygame.draw.rect(game, BLACK, (720, 350, 480, 140), 3)
+    font = pygame.font.Font(font_path, 60)
     text = font.render(message, True, BLACK)
     text_rect = text.get_rect()
-    text_rect.x = 30
-    text_rect.y = 410
+    text_rect.x = 720 - 60
+    text_rect.y = 440
     game.blit(text, text_rect)
     pygame.display.update()
 

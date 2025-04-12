@@ -4,7 +4,7 @@ import time
 from constants import *
 from ui import display_message
 from game.game_state import GameState
-from game.game_animations import fade_in_pokemon, draw_battle_ui, draw_message, draw_selection_screen
+from game.game_animations import fade_in_pokemon, draw_battle_ui, draw_message, draw_selection_screen, init_resources
 from game.game_logic import handle_player_turn, handle_pokemon_selection, handle_fainted_state
 
 pygame.init()
@@ -12,6 +12,8 @@ pygame.init()
 # Установка игрового окна
 game = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 pygame.display.set_caption('Pokemon Battle')
+
+init_resources()
 
 menu_back = pygame.image.load("res/start.png").convert_alpha()
 
@@ -61,7 +63,7 @@ def draw_main_menu():
     
     # Кнопка для файтинга
     fight_button = pygame.Rect(GAME_WIDTH//2-250, GAME_HEIGHT//2-100, 500, 178)
-    pygame.draw.rect(game,RED,fight_button)
+    #pygame.draw.rect(game,RED,fight_button)
     fight_text = button_font.render("В бой", True, WHITE)
     fight_text_shade = button_font.render("В бой", True, (107,107,106))
     game.blit(button_img,(GAME_WIDTH//2-250, GAME_HEIGHT//2-100))
@@ -318,9 +320,10 @@ def main():
             
             elif game_state.status == 'gameover':
                 if game_state.player2_pokemon.current_hp == 0:
-                    display_message('Player 1 wins! Play again (Y/N)?', game)
+                    
+                    display_message('Игрок 1 победил! Сыграть снова? (Y/N)?', game)
                 else:
-                    display_message('Player 2 wins! Play again (Y/N)?', game)
+                    display_message('Игрок 2 победил! Сыграть снова? (Y/N)?', game)
         
         pygame.display.update()
     
