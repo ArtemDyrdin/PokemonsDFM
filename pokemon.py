@@ -3,7 +3,6 @@ import os
 import pygame
 import math
 import random
-import requests
 import io
 from urllib.request import urlopen
 from constants import *
@@ -23,7 +22,6 @@ class Pokemon(pygame.sprite.Sprite):
         self.size = 150  # Установка размера до загрузки спрайтов
 
         # Загрузка данных с API
-        self.json = self.load_pokemon_data()
         
         # Инициализация характеристик
         self.init_stats()
@@ -54,15 +52,6 @@ class Pokemon(pygame.sprite.Sprite):
         self.message = None
         self.message_start_time = 0
         self.message_duration = 1000  # 1 секунда для сообщений
-
-    def load_pokemon_data(self):
-        '''Загрузка данных покемона с PokeAPI'''
-        try:
-            req = requests.get(f'{BASE_URL}/pokemon/{self.name.lower()}')
-            return req.json()
-        except Exception as e:
-            print(f"Error loading data for {self.name}: {e}")
-            return {}
 
     def init_stats(self):
         '''Инициализация базовых характеристик'''
