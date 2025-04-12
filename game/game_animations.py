@@ -87,10 +87,29 @@ def draw_battle_ui(game_state, game):
     # Отрисовка покемонов и их HP
     
     
-    name1_font = pygame.font.Font(font_path2, 90) #150 было 
-    name1_text = name1_font.render(f"{game_state.player1_pokemon.name}", True, BLACK) 
-    name2_text = name1_font.render(f"{game_state.player2_pokemon.name}", True, BLACK) 
+    name1_font = pygame.font.Font(font_path, 90) #150 было 
     
+    if game_state.player1_pokemon.name == "Bulbasaur":
+        name1_text = name1_font.render("Физтрон", True, BLACK) 
+    elif game_state.player1_pokemon.name == "Charmander":
+        name1_text = name1_font.render("Филинарий", True, BLACK) 
+    elif game_state.player1_pokemon.name == "Squirtle":
+        name1_text = name1_font.render("Матультор", True, BLACK) 
+        
+    if game_state.player2_pokemon.name == "Bulbasaur":
+        name2_text = name1_font.render("Физтрон", True, BLACK) 
+    elif game_state.player2_pokemon.name == "Charmander":
+        name2_text = name1_font.render("Филинарий", True, BLACK) 
+    elif game_state.player2_pokemon.name == "Squirtle":
+        name2_text = name1_font.render("Матультор", True, BLACK) 
+    
+        
+        
+# =============================================================================
+#     name1_text = name1_font.render(f"{game_state.player1_pokemon.name}", True, BLACK) 
+#     name2_text = name1_font.render(f"{game_state.player2_pokemon.name}", True, BLACK) 
+#     
+# =============================================================================
    # game.blit(title_text, (GAME_WIDTH//2 - title_text.get_width()//2, GAME_HEIGHT//5))
     
     global battle_surf_flag

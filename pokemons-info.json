@@ -1,7 +1,7 @@
 {
   "Bulbasaur": {
     "Name": "Bulbasaur",
-    "Types": [ "Grass", "Poison" ],
+    "Types": [ "Electric" ],
     "HP": 45,
     "Attack": 49,
     "Defense": 49,
@@ -20,7 +20,7 @@
       },
       {
         "Name": "Poison",
-        "Power": 0,
+        "Power": 25,
         "Type": "Poison",
         "Effect": "Poisons the target"
       }
@@ -28,7 +28,7 @@
   },
   "Charmander": {
     "Name": "Charmander",
-    "Types": [ "Fire" ],
+    "Types": [ "Fly" ],
     "HP": 39,
     "Attack": 52,
     "Defense": 43,
@@ -54,7 +54,7 @@
   },
   "Squirtle": {
     "Name": "Squirtle",
-    "Types": [ "Water" ],
+    "Types": [ "Electric" ],
     "HP": 44,
     "Attack": 48,
     "Defense": 65,
