@@ -8,6 +8,13 @@ from move import Move
 from ui import display_message
 import time
 
+
+hpbar1_img = pygame.image.load("res/hp_bar1.png")
+hpbar1_img = pygame.transform.scale(hpbar1_img,(520,186))
+
+hpbar2_img = pygame.image.load("res/hp_bar2.png")
+hpbar2_img = pygame.transform.scale(hpbar2_img,(510,149))
+
 class Pokemon(pygame.sprite.Sprite):
     def __init__(self, name, level, x, y, data):
         '''Установка имени, уровня, позиции на экране и количество зелий покемона'''
@@ -34,35 +41,113 @@ class Pokemon(pygame.sprite.Sprite):
         # сохрание типов покемона
         self.types = self.data['Types']
 
-        self.size = 150
+        self.size = 300
         self.load_sprites()
+        
+        # Анимация исцеления
+        self.heal_sprites = []
+        self.current_heal_sprite = 0
+        self.heal_animation_speed = 0.3
+        self.healing_animation = False
+        self.last_heal_update = 0
+        self.load_heal_sprites()
+       # self.create_heal_fallback()
+       
+       
+    def load_heal_sprites(self):
+     """Загрузка спрайтов исцеления"""
+     self.heal_sprites = []
+     try:
+         for i in range(1, 8):
+             path = f"sprites/heal/{i}.png"
+             print(path)
+             if os.path.exists(path):
+                 sprite = pygame.image.load(path).convert_alpha()
+                 self.heal_sprites.append(self.scale_sprite(sprite))
+     except Exception as e:
+         print(f"Heal sprite error: {e}")
+
+# =============================================================================
+#     def create_heal_fallback(self):
+#         """Создание резервной анимации исцеления"""
+#         if not self.heal_sprites:
+#             size = int(self.size * 0.8)
+#             for alpha in range(50, 251, 50):
+#                 surf = pygame.Surface((size, size), pygame.SRCALPHA)
+#                 pygame.draw.circle(surf, (0, 255, 0, alpha), 
+#                                 (size//2, size//2), size//3)
+#                 self.heal_sprites.append(surf)
+# =============================================================================
+
+
+# =============================================================================
+#     def load_sprites(self):
+#         """Загружает 4 спрайта анимации из локальной папки"""
+#         sprite_folder = f"sprites/{self.name}"
+#         
+#         # Загружаем 4 спрайта (1.png, 2.png, 3.png, 4.png)
+#         for i in range(1, 5):
+#             sprite_path = os.path.join(sprite_folder, f"{i}.png")
+#             try:
+#                 if os.path.exists(sprite_path):
+#                     sprite = pygame.image.load(sprite_path).convert_alpha()
+#                     # Масштабируем спрайт
+#                     scale = self.size / sprite.get_width()
+#                     new_width = int(sprite.get_width() * scale)
+#                     new_height = int(sprite.get_height() * scale)
+#                     sprite = pygame.transform.scale(sprite, (new_width, new_height))
+#                     self.sprites.append(sprite)
+#             except Exception as e:
+#                 print(f"Error loading sprite {sprite_path}: {e}")
+# =============================================================================
 
     def load_sprites(self):
-        """Загружает 4 спрайта анимации из локальной папки"""
-        sprite_folder = f"sprites/{self.name}"
-        
-        # Загружаем 4 спрайта (1.png, 2.png, 3.png, 4.png)
-        for i in range(1, 5):
-            sprite_path = os.path.join(sprite_folder, f"{i}.png")
+            """Загрузка анимационных спрайтов"""
+            sprite_folder = f"sprites/{self.name}"
+            self.sprites = []
+            
             try:
-                if os.path.exists(sprite_path):
-                    sprite = pygame.image.load(sprite_path).convert_alpha()
-                    # Масштабируем спрайт
-                    scale = self.size / sprite.get_width()
-                    new_width = int(sprite.get_width() * scale)
-                    new_height = int(sprite.get_height() * scale)
-                    sprite = pygame.transform.scale(sprite, (new_width, new_height))
-                    self.sprites.append(sprite)
+                # Проверка существования папки
+                if not os.path.exists(sprite_folder):
+                    raise FileNotFoundError
+    
+                for i in range(1, 5):
+                    sprite_path = os.path.join(sprite_folder, f"{i}.png")
+                    if os.path.exists(sprite_path):
+                        sprite = pygame.image.load(sprite_path).convert_alpha()
+                        sprite = self.scale_sprite(sprite)
+                        self.sprites.append(sprite)
             except Exception as e:
-                print(f"Error loading sprite {sprite_path}: {e}")
+                print(f"Sprite loading error: {e}")
+                
+                
+    def scale_sprite(self, sprite):
+        """Масштабирование спрайта"""
+        scale = self.size / max(sprite.get_size())
+        return pygame.transform.smoothscale(
+            sprite,
+            (
+                int(sprite.get_width() * scale),
+                int(sprite.get_height() * scale)
+            )
+        )
 
     def update_animation(self):
         '''Обновляет текущий кадр анимации'''
         now = pygame.time.get_ticks()
-        if now - self.last_update > self.animation_speed * 1000:  # Преобразуем секунды в миллисекунды
-            self.last_update = now
-            self.current_sprite = (self.current_sprite + 1) % len(self.sprites)
-            self.image = self.sprites[self.current_sprite]
+        if self.healing_animation:
+            if now - self.last_heal_update > self.heal_animation_speed * 1000:
+                self.last_heal_update = now
+                self.current_heal_sprite += 1
+                if self.current_heal_sprite >= len(self.heal_sprites):
+                    self.healing_animation = False
+                    self.current_heal_sprite = 0
+        
+        else:
+            if now - self.last_update > self.animation_speed * 1000:  # Преобразуем секунды в миллисекунды
+                self.last_update = now
+                self.current_sprite = (self.current_sprite + 1) % len(self.sprites)
+                self.image = self.sprites[self.current_sprite]
 
     def draw(self, game, alpha=255):
         '''Отрисовывает покемона на экране с анимацией'''
@@ -71,11 +156,23 @@ class Pokemon(pygame.sprite.Sprite):
         transparency = (255, 255, 255, alpha)
         sprite.fill(transparency, None, pygame.BLEND_RGBA_MULT)
         game.blit(sprite, (self.x, self.y))
+        
+        # Анимация исцеления
+        if self.healing_animation and self.heal_sprites:
+            try:
+                heal_img = self.heal_sprites[self.current_heal_sprite]
+                pos = (
+                    self.x + (self.image.get_width() - heal_img.get_width()) // 2,
+                    self.y + (self.image.get_height() - heal_img.get_height()) // 2
+                )
+                game.blit(heal_img, pos)
+            except (IndexError, pygame.error):
+                self.healing_animation = False
 
     def perform_attack(self, other, move, game):
         '''Выполняет атаку на другого покемона'''
         display_message(f'{self.name} used {move.name}', game)
-        time.sleep(2)
+        #time.sleep(2)
         damage = (2 * self.level + 10) / 250 * self.attack / other.defense * move.power
         if move.type in self.types:
             damage *= 1.5
@@ -91,13 +188,31 @@ class Pokemon(pygame.sprite.Sprite):
         if self.current_hp < 0:
             self.current_hp = 0
 
+# =============================================================================
+#     def use_potion(self):
+#         '''Использует зелье для восстановления здоровья'''
+#         if self.num_potions > 0:
+#             self.current_hp += 30
+#             if self.current_hp > self.max_hp:
+#                 self.current_hp = self.max_hp
+#             self.num_potions -= 1
+#             self.start_heal_animation()
+# =============================================================================
+            
+            
+            
     def use_potion(self):
-        '''Использует зелье для восстановления здоровья'''
+        """Использование зелья"""
         if self.num_potions > 0:
-            self.current_hp += 30
-            if self.current_hp > self.max_hp:
-                self.current_hp = self.max_hp
+            self.current_hp = min(self.max_hp, self.current_hp + 30)
             self.num_potions -= 1
+            self.start_heal_animation()
+            
+    def start_heal_animation(self):
+        """Запуск анимации исцеления"""
+        self.healing_animation = True
+        self.current_heal_sprite = 0
+        self.last_heal_update = pygame.time.get_ticks()
 
     def set_moves(self):
         '''Загружает атаки покемона'''
@@ -112,19 +227,21 @@ class Pokemon(pygame.sprite.Sprite):
 
     def draw_hp(self, game):
         '''Отрисовывает полоску здоровья покемона'''
-        bar_scale = 200 // self.max_hp
+       # game.blit(hpbar1_img,(970, 550))    
+        bar_scale = 243 / self.max_hp
+        print(bar_scale)
         for i in range(self.max_hp):
-            bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 20)
+            bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 15)
             pygame.draw.rect(game, RED, bar)
         for i in range(self.current_hp):
-            bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 20)
+            bar = (self.hp_x + bar_scale * i, self.hp_y, bar_scale, 15)
             pygame.draw.rect(game, GREEN, bar)
-        font = pygame.font.Font(pygame.font.get_default_font(), 16)
-        text = font.render(f'HP: {self.current_hp} / {self.max_hp}', True, BLACK)
-        text_rect = text.get_rect()
-        text_rect.x = self.hp_x
-        text_rect.y = self.hp_y + 30
-        game.blit(text, text_rect)
+       # font = pygame.font.Font(pygame.font.get_default_font(), 20)
+       # text = font.render(f'HP: {self.current_hp} / {self.max_hp}', True, BLACK)
+       # text_rect = text.get_rect()
+       # text_rect.x = self.hp_x
+        #text_rect.y = self.hp_y + 30
+        #game.blit(text, text_rect)
 
     def get_rect(self):
         '''Получить параметры прямоугольника спрайта покемона'''

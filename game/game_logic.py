@@ -59,19 +59,19 @@ def handle_fainted_state(game_state, game):
     alpha = 255
     while alpha > 0:
         game.fill(WHITE)
-        game_state.player1_pokemon.draw_hp(game)
-        game_state.player2_pokemon.draw_hp(game)
+       #game_state.player1_pokemon.draw_hp(game)
+       #game_state.player2_pokemon.draw_hp(game)
         
         if game_state.player2_pokemon.current_hp == 0:
             game_state.player1_pokemon.draw(game)
             game_state.player2_pokemon.draw(game, alpha)
-            display_message(f'Player 2: {game_state.player2_pokemon.name} fainted!', game)
+           # display_message(f'Player 2: {game_state.player2_pokemon.name} fainted!', game)
         else:
             game_state.player1_pokemon.draw(game, alpha)
             game_state.player2_pokemon.draw(game)
-            display_message(f'Player 1: {game_state.player1_pokemon.name} fainted!', game)
+            #display_message(f'Player 1: {game_state.player1_pokemon.name} fainted!', game)
         
-        alpha -= 0.4
+        alpha -= 2
         pygame.display.update()
     
     game_state.status = 'gameover'
