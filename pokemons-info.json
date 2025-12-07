@@ -9,17 +9,17 @@
     "Info": "A strange seed was planted on its back at birth...",
     "Attacks": [
       {
-        "Name": "Tackle",
+        "Name": "Схватить",
         "Power": 40,
         "Type": "Normal"
       },
       {
-        "Name": "Vine Whip",
+        "Name": "Хлыст",
         "Power": 45,
         "Type": "Grass"
       },
       {
-        "Name": "Poison",
+        "Name": "Отравить",
         "Power": 25,
         "Type": "Poison",
         "Effect": "Poisons the target"
@@ -36,17 +36,17 @@
     "Info": "Obviously prefers hot places...",
     "Attacks": [
       {
-        "Name": "Scratch",
+        "Name": "Поцарапать",
         "Power": 40,
         "Type": "Normal"
       },
       {
-        "Name": "Ember",
+        "Name": "Обжечь",
         "Power": 40,
         "Type": "Fire"
       },
       {
-        "Name": "Fire Fang",
+        "Name": "Укусить",
         "Power": 65,
         "Type": "Fire"
       }
@@ -62,17 +62,17 @@
     "Info": "After birth, its back swells...",
     "Attacks": [
       {
-        "Name": "Tackle",
+        "Name": "Ударить",
         "Power": 40,
         "Type": "Normal"
       },
       {
-        "Name": "Water Gun",
+        "Name": "Напугать",
         "Power": 40,
         "Type": "Water"
       },
       {
-        "Name": "Bubble",
+        "Name": "Ткнуть",
         "Power": 40,
         "Type": "Water"
       }
